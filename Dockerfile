@@ -13,6 +13,6 @@ RUN make GPU=1
 
 FROM nvidia/cuda:10.1-runtime-ubuntu16.04
 
-COPY --from=build /tmp/darknet /usr/local/bin
+COPY --from=build /tmp/darknet/darknet /usr/local/bin
 
 ENTRYPOINT ["darknet"]
