@@ -15,4 +15,8 @@ FROM nvidia/cuda:10.1-runtime-ubuntu18.04
 
 COPY --from=build /tmp/darknet/darknet /usr/local/bin
 
+RUN apt update \
+ && apt install -y python3.6 \
+ && apt clean
+
 ENTRYPOINT ["darknet"]
