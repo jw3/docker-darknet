@@ -1,0 +1,11 @@
+FROM jwiii/darknet
+
+USER root
+
+RUN apt update \
+ && apt install -y python3.6 python3-pip git \
+ && apt clean \
+ && pip3 install --no-cache-dir --upgrade pip \
+ && ln -s /usr/bin/python3 /usr/bin/python
+
+USER 10001

@@ -15,10 +15,6 @@ FROM nvidia/cuda:10.1-runtime-ubuntu18.04
 
 COPY --from=build /tmp/darknet/darknet /usr/local/bin
 
-RUN apt update \
- && apt install -y python3.6 \
- && apt clean
-
 RUN mkdir /opt/workspace \
  && useradd -u 10001 -G 0 -d /opt/workspace default \
  && chown default:0 /opt/workspace
