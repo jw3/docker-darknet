@@ -19,4 +19,12 @@ RUN apt update \
  && apt install -y python3.6 \
  && apt clean
 
+RUN mkdir /opt/workspace \
+ && useradd -u 10001 -G 0 -d /opt/workspace default \
+ && chown default:0 /opt/workspace
+
+WORKDIR /opt/workspace
+
+USER 10001
+
 ENTRYPOINT ["darknet"]
