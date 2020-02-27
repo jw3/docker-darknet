@@ -1,0 +1,25 @@
+FROM buildpack-deps:bionic
+
+ARG LFS_VERSION="v2.10.0"
+
+RUN curl -sL -o /tmp/lfs.tar.gz "https://github.com/git-lfs/git-lfs/releases/download/${LFS_VERSION}/git-lfs-linux-amd64-${LFS_VERSION}.tar.gz"
+
+#-------------------------
+
+FROM jwiii/darknet:python36
+
+ENV PYTHONPATH=/opt/src
+
+USER root
+
+COPY --from=0 /tmp/lfs.tar.gz /tmp/lfs/
+
+RUN mkdir -p /tmp/lfs/src \
+ && tar xvzf /tmp/lfs/lfs.tar.gz -C /tmp/lfs/src \
+ && /tmp/lfs/src/install.sh \
+ && git lfs install --skip-smudge \
+ && rm -rf /tmp/*
+
+RUN pip install --no-cache-dir git+https://github.com/ctc-oss/xview-lfs
+
+USER 10001
