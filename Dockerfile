@@ -30,7 +30,8 @@ WORKDIR /opt/darknet
 COPY --from=weights /tmp/darknet/        .
 COPY --from=build   /tmp/darknet/cfg     cfg
 COPY --from=build   /tmp/darknet/darknet /usr/local/bin
+COPY                entrypoint.sh        /usr/local/bin
 
 USER 10001
 
-ENTRYPOINT ["darknet"]
+ENTRYPOINT ["entrypoint.sh"]
