@@ -1,3 +1,11 @@
+FROM buildpack-deps:bionic as weights
+
+WORKDIR /tmp/darknet
+
+RUN curl -sL -O https://pjreddie.com/media/files/darknet53.conv.74
+
+#------------------------------------
+
 FROM nvidia/cuda:10.1-devel-ubuntu18.04 as build
 
 RUN apt update \
@@ -13,13 +21,15 @@ RUN make GPU=1
 
 FROM nvidia/cuda:10.1-runtime-ubuntu18.04
 
-COPY --from=build /tmp/darknet/darknet /usr/local/bin
-
 RUN mkdir /opt/workspace \
  && useradd -u 10001 -G 0 -d /opt/workspace default \
  && chown default:0 /opt/workspace
 
-WORKDIR /opt/workspace
+WORKDIR /opt/darknet
+
+COPY --from=weights /tmp/darknet/        .
+COPY --from=build   /tmp/darknet/cfg     cfg
+COPY --from=build   /tmp/darknet/darknet /usr/local/bin
 
 USER 10001
 
